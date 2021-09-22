@@ -1,0 +1,266 @@
+﻿@model ViewModel
+
+<div class="index-bg-color">
+    <div class="row banner-height mt-0">
+        <div class="col-md-6 btn-purple center-item">
+            <div class="modal-body btn-purple">
+                <div class="modal-dialog div-centers btn-purple modal-xl">
+                    <div class="modal-header">
+                        <span class="complaints-big-header btn-purple">
+                            Şikayetiniz mi var?
+                        </span>
+                    </div>
+                    <div class="modal-body">
+                        <span class="complaints-big-text btn-purple">
+                            Gelin beraber çözüme ulaşmaya çalışalım.
+                        </span>
+                    </div>
+                    <div class="modal-body">
+                        <span class="complaints-big-text btn-purple">
+                            Şikayetinizi paylaşın ve hızlıca çözüme ulaşın.
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 center-item">
+            <div class="modal-body mb-3">
+                <div class="modal-dialog div-centers modal-xl">
+                    <div class="modal-header">
+                        <span class="complaints-big-header">
+                            Çözüme ulaşamıyor musunuz?
+                        </span>
+                    </div>
+                    <div class="modal-body">
+                        <span class="complaints-big-text">
+                            Markalarla ve kişilerle iletişim kurmanızı kolaylaştırarak çözüme ulaşmanızı amaçlıyoruz.
+                        </span>
+                    </div>
+                    <div class="modal-body">
+                        <span class="complaints-big-text">
+                            Çözüm sandığınızdan daha hızlı olacak.
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    @* Son 8 Şikayeti Getirir *@
+    @{int i = 0;}
+    @{int j = 8;}
+
+    <div class="comment-title mt-0 mb-n1">
+        <h3 class="p-3">Gündemdeki Şikayetler</h3>
+    </div>
+    <section class="responsive slider mt-5 mb-5" id="responsive">
+        @foreach (var x in Model.ComplaintsList)
+        {
+            if (i == j)
+            {
+                break;
+            }
+            <div class="complaint-white m-3 modal-round">
+                <div class="modal-dialog">
+                    <div class="modal-content border-0">
+                        <div class="modal-header pt-0">
+                            <div class="complaint-username ml-n3">
+                                <div class="d-flex">
+                                    <img src="~/Content/images/image1.png" class="complaints-img" />
+                                    <div class="center-item-grid ml-2">
+                                        <a href="/Home/Profile/@x.Users.id" class="activate" target="_self" style="z-index: 999; pointer-events: all">
+                                            <span>@x.Users.username.Trim()</span>
+                                        </a>
+                                        <a href="/Home/MarkaDetay/@x.Companys.id" target="_self" style="z-index: 999; pointer-events: all">
+                                            <span>@x.Companys.company</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="date-time time-top">
+                                <time class="timeago" datetime="">@x.complaint_releasedate</time>
+                            </span>
+                        </div>
+                        <div class="modal-body mb-0 pb-0">
+                            <span class="complaints-header">
+                                <a href="/Home/SikayetDetay/@x.id" class="activate" target="_self" style="z-index: 999; pointer-events: all">
+                                    @x.complaint_header
+                                </a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            i++;
+        }
+    </section>
+
+    <div class="row complaints-center banner-height mt-0">
+        <div class="col-md-6 center-item">
+            <div class="modal-body complaints btn-purple mb-3 mt-3">
+                <div class="modal-dialog div-centers complaints btn-purple modal-xl">
+                    <div class="modal-header">
+                        <span class="complaints-big-header btn-purple">
+                            Şikayet Oluşturun
+                        </span>
+                    </div>
+                    <div class="modal-body">
+                        <span class="complaints-big-text btn-purple">
+                            Onaylı Markalara İletilsin
+                        </span>
+                    </div>
+                    <div class="modal-body">
+                        <span class="complaints-big-text btn-purple">
+                            Ve Çözüme Ulaşın
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 btn-purple center-item">
+            <div class="modal-body complaints mb-3 mt-3">
+                <div class="modal-dialog div-centers complaints modal-xl">
+                    <div class="modal-header">
+                        <span class="complaints-big-header">
+                            Diğer Kullanıcıların Şikayetlerine Yorum Yapın
+                        </span>
+                    </div>
+                    <div class="modal-body">
+                        <span class="complaints-big-text">
+                            Onların Çözüme Ulaşmasını Sağlayın
+                        </span>
+                    </div>
+                    <div class="modal-body">
+                        <span class="complaints-big-text">
+                            Onlar da Size Yardımcı Olsun
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    @* Bireysel üye Sayısını, Marka Sayısını, Toplam Şikayeti ve Çözülen Şikayetleri Getirir. *@
+    <div class="comment-title text-center mb-n1">
+        <h3 class="p-3">Sayılarla Biz</h3>
+    </div>
+    <div class="index-main-page">
+        <div class="row">
+            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 mycols ">
+                <div class="modal-dialog ">
+                    <div class="modal-content modal-round border-0">
+                        <div class="modal-header">
+                            <i class="far fa-id-badge fa-5x fa-color"></i>
+                        </div>
+                        <div class="modal-body">
+                            <span class="complaints-header">
+                                Bireysel Üye
+                            </span>
+                            <span class="complaints-header">
+                                @Model.UsersList.Count
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 mycols">
+                <div class="modal-dialog">
+                    <div class="modal-content modal-round border-0">
+                        <div class="modal-header">
+                            <i class="fas fa-clipboard fa-5x fa-color"></i>
+                        </div>
+                        <div class="modal-body">
+                            <span class="complaints-header">
+                                Toplam Şikayet
+                            </span>
+                            <span class="complaints-header">
+                                @Model.ComplaintsList.Count
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 mycols">
+                <div class="modal-dialog">
+                    <div class="modal-content modal-round border-0">
+                        <div class="modal-header">
+                            <i class="fas fa-clipboard-check fa-5x fa-color"></i>
+                        </div>
+                        <div class="modal-body">
+                            <span class="complaints-header">
+                                Çözülen Şikayet
+                            </span>
+                            <span class="complaints-header">
+                                @{var sayac = 0;}
+                                @foreach (var x in Model.ComplaintsList)
+                                {
+                                    if (x.complaint_processstate == "Y")
+                                    {
+                                        sayac++;
+                                    }
+                                }
+                                @sayac
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 mycols">
+                <div class="modal-dialog">
+                    <div class="modal-content modal-round border-0">
+                        <div class="modal-header">
+                            <i class="fas fa-check-circle fa-5x fa-color"></i>
+                        </div>
+                        <div class="modal-body">
+                            <span class="complaints-header">
+                                Kayıtlı Marka
+                            </span>
+                            <span class="complaints-header">
+                                @{var kayıtlımarka = @Model.CompanyList.Count - 1; }
+                                @kayıtlımarka
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.Partial("_Footer")
+<script src="~/Scripts/slick.min.js"></script>
+<script>
+    $('#responsive').slick({
+        arrows: false,
+        dots: false,
+        autoplay: true,
+        infinite: true,
+        speed: 300,
+        centerMode: true,
+        slidesToShow: 2,
+        adaptiveHeight: true,
+        responsive: [
+            {
+                breakpoint: 1024,
+                settings: {
+                    slidesToShow: 2
+                }
+            },
+            {
+                breakpoint: 600,
+                settings: {
+                    slidesToShow: 1
+                }
+            },
+            {
+                breakpoint: 480,
+                settings: {
+                    slidesToShow: 1,
+                    centerMode: false
+                }
+            }
+        ]
+    });
+</script>

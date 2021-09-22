@@ -1,0 +1,139 @@
+﻿@model ViewModel
+
+<div class="container-md bg-color">
+    @* Kullanıcının Şifresini Değiştirebilecei Alan *@
+    @foreach (var x in Model.user)
+    {
+        if (@HttpContext.Current.User.Identity.IsAuthenticated && @HttpContext.Current.User.Identity.Name == @x.username)
+        {
+            using (Html.BeginForm("UpdateProfile", "Home", FormMethod.Post))
+            {
+                <div class="modal-body complaints mt-3">
+                    <div class="modal-header">
+                        <span class="complaint-username ml-n3">
+                            <img src="~/Content/images/image1.png" class="complaints-img" />
+                            <span>
+                                @x.username
+                            </span>
+                        </span>
+                    </div>
+                    <div class="center-item">
+                        <div class="modal-dialog complaints modal-xl">
+                            <div class="modal-body">
+                                @Html.TextBoxFor(m => m.users.username, new { @class = "form-control text-center fw-bold mb-3 p-2 button-input-round border-0 w-100 disabled", @Value = @x.username.Trim(), required = "required", style = "z-index: 999; pointer-events: all", @readonly = "readonly" })
+                                @Html.TextBoxFor(m => m.users.email, new { @class = "form-control text-center fw-bold mb-3 p-2 button-input-round border-0 w-100 disabled", @Value = @x.email.Trim(), required = "required", style = "z-index: 999; pointer-events: all", @readonly = "readonly" })
+                                @Html.PasswordFor(m => m.users.password, new { @class = "form-control text-center fw-bold p-2 button-input-round border-0 w-100 disabled", placeholder = "password", required = "required", style = "z-index: 999; pointer-events: all", maxlength = "10", minlength = "8" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-purple button-input-round" style="z-index: 999; pointer-events: all">
+                            Kaydet
+                        </button>
+                    </div>
+                </div>
+            }
+        }
+    }
+
+    @* Kullanıcının Şikayetler Listelenir *@
+    <div class="comment-title">
+        <h3>Şikayetler</h3>
+    </div>
+    @foreach (var x in Model.Complaints.Reverse())
+    {
+        var answer = "";
+        if (@x.complaint_processstate == "Y")
+        {
+            answer = "answer-t";
+        }
+        <div class="modal-body complaints mt-3 @answer">
+            <div class="modal-dialog div-centers complaints @answer modal-xl">
+                <a href="/Home/SikayetDetay/@x.id" target="_self" style="z-index: 999; pointer-events: all">
+                    <span class="complaints-header">@x.complaint_header.Trim()</span>
+                </a>
+                <div class="modal-header">
+                    <span class="complaint-username ml-n3">
+                        <img src="~/Content/images/image1.png" class="complaints-img" />
+                        <span>@x.username.Trim()</span>
+                    </span>
+                    <span class="date-time time-top">
+                        <time class="timeago" datetime="">@x.complaint_releasedate</time>
+                    </span>
+                </div>
+                <div class="modal-body">
+                    <span class="complaints-text" id="read-more">
+                        @if (@x.complaint_text.Trim().Length > 300)
+                        {
+                            @x.complaint_text.Trim().Substring(0, 300);
+                        }
+                        else
+                        {
+                            @x.complaint_text.Trim();
+                        }...
+                    </span>
+                    <div class="read-more">
+                        @if (@x.complaint_text.Trim().Length > 300)
+                        {
+                            <a href="/Home/SikayetDetay/@x.id" target="_self" style="z-index: 999; pointer-events: all">Devamını Oku</a>}
+                    </div>
+                </div>
+            </div>
+            @if (@x.complaint_picture != null)
+            {
+                <div class="all-complaints">
+                    <img src="@x.complaint_picture" class="modal-round">
+                </div>          
+            }
+            <div class="make-comment modal-footer mb-n3">
+                <a href="/Home/SikayetDetay/@x.id" class="activate" target="_self" style="z-index: 999; pointer-events: all">
+                    <i class="far fa-comment"></i>
+                </a>
+            </div>
+        </div>
+        }
+
+    @* Kullanıcının Yorumları Listelenir *@
+    <div class="comment-title">
+        <h3>Yorumlar</h3>
+    </div>
+
+    <div class="complaints mb-3">
+
+        @foreach (var x in Model.Comments.Reverse())
+        {@* Comments(Yorumlar) Tablosu Tüm Yorumlar - İÇİNDE KULLANILANLAR
+                @x.comment_answer
+                @x.username
+                @x.comment_date
+                @x.comment
+                @x.complaint_id
+        *@ var answer = "";
+        if (@x.Complaints.complaint_processstate == "Y")
+        {
+            answer = "answer-t";
+        }
+        <div class="modal-body @answer modal-round mb-n5">
+            <div class="modal-dialog div-centers modal-xl @answer">
+                <a href="/Home/SikayetDetay/@x.complaint_id" target="_self" style="z-index: 999; pointer-events: all">
+                    <span class="complaints-header">@x.Complaints.complaint_header.Trim()</span>
+                </a>
+                <div class="modal-header">
+                    <span class="complaint-username ml-n3">
+                        <img src="~/Content/images/image1.png" class="complaints-img" />
+                        <span>@x.username.Trim()</span>
+                    </span>
+                    <div class="d-grid time-top">
+                        <span class="date-time">
+                            <time class="timeago" datetime="">@x.comment_date</time>
+                        </span>
+                    </div>
+                </div>
+                <div class="modal-body">
+                    <span class="complaints-text">
+                        @x.comment.Trim()
+                    </span>
+                </div>
+            </div>
+        </div>}
+    </div>
+</div>

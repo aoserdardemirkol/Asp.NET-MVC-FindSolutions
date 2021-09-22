@@ -1,0 +1,164 @@
+﻿@model ctfw.Models.EntityFramework.Users
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+
+    <link href="~/Content/toastr.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/v4-shims.css">
+
+    <link rel="stylesheet" href="~/Content/style.css" />
+
+    <script src="~/Scripts/jquery-3.5.1.js"></script>
+    <script src="~/Scripts/toastr.js"></script>
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <title>Login</title>
+</head>
+<body class="backgorund-color">
+    @using (Html.BeginForm("Login", "Security", FormMethod.Post))
+    {
+            <div class="modal-dialog centerr modal-lg bg">
+                <div class="modal-content modal-round border-0 bg">
+                    <div class="row modal-round modal-bgwcolor complaints-center">
+                        <div class="col-lg-6 modal-round modal-bgcolor" id="login-left">
+                            <picture>
+                                <source media="(min-width:800px)" srcset="~/Content/images/login.png" />
+                                <img src="~/Content/images/login.png" class="image-size ml-n4" />
+                            </picture>
+                        </div>
+                        <div class="col-lg-6 col-md-12 col-sm-12 modal-round">
+                            <div class="center-item-grid mx-auto">
+                                <div class="modal-header mx-auto col-4 center-item">
+                                    <h5 class="modal-title fw-bold">
+                                        <span class="lead">
+                                            Giriş Yap
+                                        </span>
+                                    </h5>
+                                </div>
+                                <div class="modal-body center-item-grid mx-auto">
+                                    @Html.TextBoxFor(m => m.username, new { @class = "form-control text-center fw-bold mb-3 p-2 button-input-round border-0 input-width", placeholder = "Kullanıcı Adı", required = "required" })
+                                    @Html.PasswordFor(m => m.password, new { @class = "form-control text-center fw-bold p-2 button-input-round border-0 input-width", placeholder = "Parola", required = "required", maxlength = "10", minlength = "8" })
+                                </div>
+                                <div class="modal-footer center-item-grid mx-auto col-6">
+                                    <button type="submit" class="btn btn-purple button-input-round">
+                                        Giriş Yap
+                                    </button>
+                                    <button type="button" class="btn btn-purple button-input-round" data-dismiss="modal" data-toggle="modal" data-target="#registerModal" aria-hidden="true">
+                                        Üye Ol
+                                    </button>
+                                    <button type="button" class="btn btn-link btn-purple-text" data-dismiss="modal" data-toggle="modal" data-target="#forgotpasswordModal" aria-hidden="true">
+                                        <span class="lead">Şifremi Unuttum</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            }
+            @using (Html.BeginForm("Register", "Security", FormMethod.Post))
+            {
+
+                <div class="modal fade" id="registerModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg bg">
+                        <div class="modal-content shadow-lg modal-round border-0 bg">
+                            <div class="row modal-round modal-bgwcolor complaints-center">
+                                <div class="col-lg-6 modal-round modal-bgcolor" id="login-left">
+                                    <picture>
+                                        <source media="(min-width:768px)" srcset="~/Content/images/login.png" />
+                                        <img src="~/Content/images/login.png" class="image-size ml-n4" />
+                                    </picture>
+                                </div>
+                                <div class="col-lg-6 col-md-12 col-sm-12 modal-round">
+                                    <span class="close mt-3 mr-3" style="cursor:pointer" data-dismiss="modal" aria-label="Close" aria-hidden="true">
+                                        &times;
+                                    </span>
+                                    <div class="center-item-grid mx-auto">
+                                        <div class="modal-header mx-auto col-4 center-item">
+                                            <h5 class="modal-title fw-bold">
+                                                <span class="lead">
+                                                    Üye Ol
+                                                </span>
+                                            </h5>
+                                        </div>
+                                        <div class="modal-body center-item-grid mx-auto">
+                                            @Html.TextBoxFor(m => m.username, new { @class = "form-control text-center fw-bold mb-3 p-2 button-input-round border-0 input-width", placeholder = "Kullanıcı Adı", required = "required", maxlength = "10", minlength = "8" })
+                                            @Html.TextBoxFor(m => m.email, new { @class = "form-control text-center fw-bold mb-3 p-2 button-input-round border-0 input-width", placeholder = "email", required = "required", type = "email" })
+                                            @Html.PasswordFor(m => m.password, new { @class = "form-control text-center fw-bold p-2 button-input-round border-0 input-width", placeholder = "Parola", required = "required", maxlength = "10", minlength = "8" })
+                                        </div>
+                                        <div class="modal-footer center-item-grid mx-auto col-6">
+                                            <button id="register" name="register" type="submit" class="btn btn-purple button-input-round">
+                                                Üye Ol
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>}
+
+            @using (Html.BeginForm("ForgotPassword", "Security", FormMethod.Post))
+            {
+                <div class="modal fade" id="forgotpasswordModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg bg">
+                        <div class="modal-content shadow-lg modal-round border-0 bg">
+                            <div class="row modal-round modal-bgwcolor complaints-center">
+                                <div class="col-lg-6 modal-round modal-bgcolor" id="login-left">
+                                    <picture>
+                                        <source media="(min-width:768px)" srcset="~/Content/images/login.png" />
+                                        <img src="~/Content/images/login.png" class="image-size ml-n4" />
+                                    </picture>
+                                </div>
+
+                                <div class="col-lg-6 col-md-12 col-sm-12 modal-round">
+                                    <span class="close mt-3 mr-3" data-dismiss="modal" aria-label="Close" aria-hidden="true">
+                                        &times;
+                                    </span>
+                                    <div class="modal-header mx-auto col-6 center-item">
+                                        <h5 class="modal-title fw-bold">
+                                            <span class="lead">Şifremi Unuttum</span>
+                                        </h5>
+                                    </div>
+                                    <div class="modal-body center-item-grid mx-auto">
+                                        @Html.TextBoxFor(m => m.email, new { @class = "form-control text-center fw-bold mb-3 p-2 button-input-round border-0 input-width", type="email", placeholder = "email" })
+                                    </div>
+                                    <div class="modal-footer center-item-grid mx-auto col-6">
+                                        <button id="fotgotpassword" name="forgotpassword" type="submit" class="btn btn-purple button-input-round">
+                                            <span>Gönder</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>}
+            @Scripts.Render("~/bundles/jquery")
+            @Scripts.Render("~/bundles/bootstrap")
+    </body>
+</html>
+
+
+<script>
+    $(function () {
+        var a = '@TempData["msg"]';
+        if (a != '') {
+            if (a == "false")
+                toastr.error("Başarısız...");
+            if (a == "true")
+                toastr.success("Başarılı...");
+        }
+    })
+</script>

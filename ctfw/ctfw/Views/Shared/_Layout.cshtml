@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="~/Content/toastr.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/v4-shims.css">
+    <link rel="stylesheet" href="~/Content/style.css" />
+
+    <link rel="stylesheet" href="~/Content/PagedList.css" />
+
+    <link rel="stylesheet" href="~/Content/slick.css" />
+
+    <script src="~/Scripts/jquery-3.5.1.js"></script>
+    <script src="~/Scripts/toastr.js"></script>
+
+    <title>ctfw</title>
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body id="elementoboy" runat="server" style="padding-top:unset; padding-bottom:unset; height:100%;">
+    @Html.Partial("_Navbar")
+
+    @RenderBody()
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+
+    <script src="~/Scripts/slick.js"></script>
+
+    <script src="~/Scripts/jquery.timeago.js"></script>
+    <script src="~/Scripts/locales/jquery.timeago.tr.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var dateAux;
+            $(".timeago").each(function (i, item) {
+                dateAux = moment($(item).html(), 'DD-MM-YYYY hh:mm:ss');
+                $(item).attr('datetime', dateAux.toISOString());
+            })
+            $("time.timeago").timeago();
+        });
+    </script>
+</body>
+</html>

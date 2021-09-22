@@ -1,0 +1,114 @@
+﻿@{var i = 0;}
+@{var j = 8;}
+<footer class="footer-bg-color">
+    <div class="container-md">
+        <nav class="navbar navbar-expand-lg navbar-light pt-5" style="border-bottom: 1px solid rgba(209,210,215,.1)">
+            <div class="navbar-collapse pb-4">
+                <ul class="navbar navbar-nav" id="footer-text">
+                    <li>
+                        <a class="navbar-brand" href="/Home/Index">
+                            <img src="~/Content/images/logo.png" style="height: 38px" />
+                        </a>
+                    </li>
+                    <li><a class="footer-navbar-link" href="/Home/Sikayetler" id="active-link" style="color:#fff !important">Şikayetler</a></li>
+                    <li><a class="footer-navbar-link" href="/Home/Markalar" id="active-link" style="color:#fff !important">Markalar</a></li>
+                </ul>
+                <ul class="navbar-right navbar-nav" id="footer-icon">
+                    <li>
+                        <i class="fab fa-instagram fa-2x footer-icon-color"></i>
+                    </li>
+                    <li>
+                        <i class="fab fa-twitter fa-2x footer-icon-color"></i>
+                    </li>
+                    <li>
+                        <i class="fab fa-youtube fa-2x footer-icon-color"></i>
+                    </li>
+                    <li>
+                        <i class="fab fa-facebook-f fa-2x footer-icon-color"></i>
+                    </li>
+                    <li>
+                        <i class="fab fa-linkedin-in fa-2x footer-icon-color"></i>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+
+        <div class="row mt-0">
+            @* Son yapılan 8 şikayeti getirir *@
+            <div class="col-md-4">
+                <div class="modal-body">
+                    <div class="modal-header ml-0 pl-0">
+                        <span class="footer-header">
+                            Şikayetler
+                        </span>
+                    </div>
+                    @{i = 0;}
+                    @{j = 8;}
+                    @foreach (var x in Model.ComplaintsList)
+                    {
+                        if (i == j)
+                        {
+                            break;
+                        }
+                        <div class="modal-body m-0 p-0 pt-1 pb-1">
+                            <a class="footer-navbar-link" href="/Home/SikayetDetay/@x.id" id="active-link" style="z-index: 999; pointer-events: all">
+                                @x.complaint_header.Trim()
+                            </a>
+                        </div>
+                        i++;
+                    }
+                    <a class="navbar-link" href="/Home/Sikayetler" id="active-link" style="z-index: 999; pointer-events: all">Tüm Şikayerler</a>
+                </div>
+            </div>
+
+            @* 8 Markayı getirir *@
+            <div class="col-md-4">
+                <div class="modal-body">
+                    <div class="modal-header ml-0 pl-0">
+                        <span class="footer-header">
+                            Markalar
+                        </span>
+                    </div>
+                    @{i = 0;}
+                    @{j = 8;}
+                    @foreach (var x in Model.CompanyList)
+                    {
+                        if (i == j)
+                        {
+                            break;
+                        }
+                        <div class="modal-body m-0 p-0 pt-1 pb-1">
+                            <a class="footer-navbar-link" href="/Home/MarkaDetay/@x.id" id="active-link" style="z-index: 999; pointer-events: all">
+                                @x.company.Trim()
+                            </a>
+                        </div>
+                        i++;
+                    }
+                    <a class="navbar-link" href="/Home/Markalar" id="active-link" style="z-index: 999; pointer-events: all">Tüm Markalar</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="modal-body">
+                    <div class="modal-header ml-0 pl-0">
+                        <span class="footer-header">
+                            Bizimle İletişime Geçin
+                        </span>
+                    </div>
+                    <div class="modal-body m-0 p-0 pt-1 pb-1">
+                        <span class="footer-navbar-link">
+                            İşbirliği için iletişime geçebilirsiniz:
+                        </span>
+                        <a class="footer-navbar-link" href="mailto:ctfw@yandex.com">
+                            ctfw@yandex.com
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer border-0">
+            <span class="text-copyright">© 2021 Her hakkı saklıdır.</span>
+        </div>
+    </div>
+</footer>

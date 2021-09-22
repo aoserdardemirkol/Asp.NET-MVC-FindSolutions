@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="ctfwModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Comments">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="username" Type="nchar" MaxLength="10" Nullable="false" />
+    <Property Name="comment" Type="nchar" MaxLength="2500" Nullable="false" />
+    <Property Name="comment_date" Type="datetime" Nullable="false" />
+    <Property Name="complaint_id" Type="int" Nullable="false" />
+    <Property Name="comment_answer" Type="nchar" MaxLength="1" Nullable="false" />
+    <Property Name="user_id" Type="int" Nullable="false" />
+    <Property Name="notification" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Companys">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="company" Type="varchar(max)" Nullable="false" />
+    <Property Name="company_img" Type="nvarchar(max)" />
+    <Property Name="company_text" Type="nchar" MaxLength="2500" />
+  </EntityType>
+  <EntityType Name="Complaints">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="user_id" Type="int" Nullable="false" />
+    <Property Name="complaint_header" Type="nchar" MaxLength="70" Nullable="false" />
+    <Property Name="complaint_text" Type="nchar" MaxLength="2500" Nullable="false" />
+    <Property Name="complaint_releasedate" Type="datetime" Nullable="false" />
+    <Property Name="complaint_processstate" Type="nchar" MaxLength="1" Nullable="false" />
+    <Property Name="username" Type="nchar" MaxLength="10" Nullable="false" />
+    <Property Name="complaint_picture" Type="nvarchar(max)" />
+    <Property Name="company_id" Type="int" Nullable="false" />
+    <Property Name="notification" Type="bit" Nullable="false" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="username" Type="nchar" MaxLength="20" Nullable="false" />
+    <Property Name="email" Type="nchar" MaxLength="50" Nullable="false" />
+    <Property Name="password" Type="nchar" MaxLength="10" Nullable="false" />
+    <Property Name="role" Type="nchar" MaxLength="1" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_Comments_Complaints">
+    <End Role="Complaints" Type="Self.Complaints" Multiplicity="1" />
+    <End Role="Comments" Type="Self.Comments" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Complaints">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Comments">
+        <PropertyRef Name="complaint_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Comments_Users">
+    <End Role="Users" Type="Self.Users" Multiplicity="1" />
+    <End Role="Comments" Type="Self.Comments" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Comments">
+        <PropertyRef Name="user_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Complaints_Companys">
+    <End Role="Companys" Type="Self.Companys" Multiplicity="1" />
+    <End Role="Complaints" Type="Self.Complaints" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Companys">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Complaints">
+        <PropertyRef Name="company_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Complaints_Users">
+    <End Role="Users" Type="Self.Users" Multiplicity="1" />
+    <End Role="Complaints" Type="Self.Complaints" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Complaints">
+        <PropertyRef Name="user_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="ctfwModelStoreContainer">
+    <EntitySet Name="Comments" EntityType="Self.Comments" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Companys" EntityType="Self.Companys" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Complaints" EntityType="Self.Complaints" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_Comments_Complaints" Association="Self.FK_Comments_Complaints">
+      <End Role="Complaints" EntitySet="Complaints" />
+      <End Role="Comments" EntitySet="Comments" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Comments_Users" Association="Self.FK_Comments_Users">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Comments" EntitySet="Comments" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Complaints_Companys" Association="Self.FK_Complaints_Companys">
+      <End Role="Companys" EntitySet="Companys" />
+      <End Role="Complaints" EntitySet="Complaints" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Complaints_Users" Association="Self.FK_Complaints_Users">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="Complaints" EntitySet="Complaints" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

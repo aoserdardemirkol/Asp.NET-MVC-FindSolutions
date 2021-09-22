@@ -1,0 +1,124 @@
+﻿@{
+    Layout = null;
+}
+@model ViewModel
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/v4-shims.css">
+    <link rel="stylesheet" href="~/Content/style.css" />
+
+    <script src="~/Scripts/jquery-3.5.1.js"></script>
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <title>Bildirimler</title>
+</head>
+
+<body class="index-bg-color p-0">
+    <div class="row complaints-center m-0">
+        <div class="col-lg-8 modal-md-12">
+            @* Bildirim Nav *@
+            @using ctfw.Models.EntityFramework
+            <nav class="navbar sticky-top navbar-expand-lg navbar-light index-bg-color m-0 p-0" style="background-color:#fff">
+                <div class="container-md">
+                    <div class="collapse navbar-collapse" id="navbarToggler">
+                        <ul class="navbar navbar-nav">
+                            <li><a class="navbar-link" href="/Home/Sikayetler" id="active-link">Şikayetler</a></li>
+                            <li><a class="navbar-link" href="/Home/Markalar" id="active-link">Markalar</a></li>
+                        </ul>
+
+                        <div class="search-bar-holder header-autocomplete-form" id="header-autocomplete">
+                            <div id="text-autocomplete" type="text" class="input-field-holder text-autocomplete" autocomplete="off">
+                            </div>
+                        </div>
+
+                        <ul class="navbar-right navbar-nav">
+                            @if (System.Web.HttpContext.Current.User.Identity.IsAuthenticated)
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link" href="/Notification/AllNotification" id="noti-icon" style="z-index: 999; pointer-events: all">
+                                        <i class="far fa-bell"></i>
+                                        @Html.Action("Notification", "Notification")
+                                    </a>
+                                </li>
+                                <li>
+                                    <div class="dropdown mr-auto">
+                                        <a class="dropdown-toggle login-user" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="z-index: 999; pointer-events: all">
+                                            <i class="fas fa-user" aria-hidden="true"></i>
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-menu-right modal-round" aria-labelledby="navbarDropdown" style="z-index: 999; pointer-events: all">
+                                            <li><a class="dropdown-item modal-round" href="#">@HttpContext.Current.User.Identity.Name</a></li>
+                                            <li><div class="dropdown-divider"></div></li>
+                                            <li><a class="dropdown-item modal-round" href="/Home/Profile/@ViewData["userid"]">profile</a></li>
+                                            <li><a class="dropdown-item modal-round" href="/Security/Logout">logout</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            @* Bildirimler Listelenir *@
+            <div class="modal-body">
+                <div class="comment-group m-3">
+                    <div class="create-complaint-title">
+                        <h3>Bildirimler</h3>
+                    </div>
+
+                    @if (Model.CommentsList != null)
+                    {
+                        foreach (var y in Model.ComplaintsList)
+                        {
+                            foreach (var x in Model.CommentsList)
+                            {
+                                if (x.notification == false && y.username == HttpContext.Current.User.Identity.Name && y.id == x.complaint_id)
+                                {
+                                    <div class="complaint-text p-2">
+                                        <a href="/Home/SikayetDetay/@y.id" class="login-user modal-round" style="color:#fff;" id="noti-look" data-id="@x.id">
+                                            <span>@x.username.Trim(), @y.complaint_header.Trim() başlığına yorum yaptı.</span>
+                                        </a>
+                                    </div>
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+        @* Gösterge *@
+        <div class="modal-body col-lg-4 col-md-12 create-complaint p-3 center-item-grid">
+            <a class="navbar-brand" href="/Home/Index">
+                <img src="~/Content/images/logo.png" style="height: 50px" />
+            </a>
+            <div class="complaints-header d-block p-2 center-item">
+                <i class="far fa-bell fa-2x fa-color"></i>
+                <span style="color: #f4f5f9 !important;">Bildirimler</span>
+            </div>
+            <div class="complaint-text p-2">
+                <span style="color: #f4f5f9 !important;">Tüm Bildirimlerin Burada</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script>
+        $(document).on("click", "#noti-look", function (e) {
+            $.ajax({
+                type: "POST",
+                url: "/Notification/AllNotification",
+                data: {
+                    id: $(this).data("id")
+                }
+            });
+        });
+    </script>
+</body>
+</html>

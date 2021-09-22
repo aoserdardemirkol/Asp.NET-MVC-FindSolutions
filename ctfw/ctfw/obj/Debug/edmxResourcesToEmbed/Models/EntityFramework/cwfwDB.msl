@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ctfwModelStoreContainer" CdmEntityContainer="ctfwEntities1">
+    <EntitySetMapping Name="Comments">
+      <EntityTypeMapping TypeName="ctfwModel.Comments">
+        <MappingFragment StoreEntitySet="Comments">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="username" ColumnName="username" />
+          <ScalarProperty Name="comment" ColumnName="comment" />
+          <ScalarProperty Name="comment_date" ColumnName="comment_date" />
+          <ScalarProperty Name="complaint_id" ColumnName="complaint_id" />
+          <ScalarProperty Name="comment_answer" ColumnName="comment_answer" />
+          <ScalarProperty Name="user_id" ColumnName="user_id" />
+          <ScalarProperty Name="notification" ColumnName="notification" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Companys">
+      <EntityTypeMapping TypeName="ctfwModel.Companys">
+        <MappingFragment StoreEntitySet="Companys">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="company" ColumnName="company" />
+          <ScalarProperty Name="company_img" ColumnName="company_img" />
+          <ScalarProperty Name="company_text" ColumnName="company_text" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Complaints">
+      <EntityTypeMapping TypeName="ctfwModel.Complaints">
+        <MappingFragment StoreEntitySet="Complaints">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="user_id" ColumnName="user_id" />
+          <ScalarProperty Name="complaint_header" ColumnName="complaint_header" />
+          <ScalarProperty Name="complaint_text" ColumnName="complaint_text" />
+          <ScalarProperty Name="complaint_releasedate" ColumnName="complaint_releasedate" />
+          <ScalarProperty Name="complaint_processstate" ColumnName="complaint_processstate" />
+          <ScalarProperty Name="username" ColumnName="username" />
+          <ScalarProperty Name="complaint_picture" ColumnName="complaint_picture" />
+          <ScalarProperty Name="company_id" ColumnName="company_id" />
+          <ScalarProperty Name="notification" ColumnName="notification" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="sysdiagrams">
+      <EntityTypeMapping TypeName="ctfwModel.sysdiagrams">
+        <MappingFragment StoreEntitySet="sysdiagrams">
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+          <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+          <ScalarProperty Name="version" ColumnName="version" />
+          <ScalarProperty Name="definition" ColumnName="definition" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="ctfwModel.Users">
+        <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="username" ColumnName="username" />
+          <ScalarProperty Name="email" ColumnName="email" />
+          <ScalarProperty Name="password" ColumnName="password" />
+          <ScalarProperty Name="role" ColumnName="role" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

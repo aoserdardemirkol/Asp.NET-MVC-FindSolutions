@@ -1,0 +1,78 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@using ctfw.Models.EntityFramework
+
+@model PagedList.IPagedList<Companys>
+
+<div class="container-md bg-color">
+    @* Tüm Markaları Getirir *@
+    <div class="comment-title">
+        <h3>Markalar</h3>
+    </div>
+    <div class="row complaints-center">
+        <div class="col-lg-8 modal-md-12">
+            @foreach (var x in Model)
+            {
+                <div class="modal-body complaints mb-3">
+                    <div class="modal-dialog div-centers complaints modal-xl">
+                        <div class="modal-header">
+                            <div class="modal-body">
+                                <div class="brand">
+                                    <div class="brand-logo mr-3">
+                                        @if (@x.company_img != null)
+                                        {
+                                            <a href="/Home/MarkaDetay/@x.id" target="_self" style="z-index: 999; pointer-events: all">
+                                                <img src="@x.company_img" />
+                                            </a>
+                                         }
+                                    </div>
+                                    <div class="mr-auto">
+                                        <a href="/Home/MarkaDetay/@x.id" target="_self" style="z-index: 999; pointer-events: all">
+                                            <span class="complaints-header">@x.company</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>}
+        </div>
+        @* Marka Arama *@
+        <div class="modal-body col-lg-4 col-md-12 search-process p-3 center-item-grid modal-round">
+            <span class="process-head-text mb-3">Marka Ara</span>
+            <form class="search-bar header-autocomplete-form" id="header-autocomplete">
+                <input id="ara" name="ara" type="text" class="input-field text-autocomplete" autocomplete="off"
+                   placeholder="Marka Ara">
+                <button aria-label="btn" class="txt-autocomplete-icon">
+                    <span class="loader l-small" style="display: none;"></span>
+                    <i class="fas fa-search" width="14" height="18"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+    @* Markalar Sayfalanır *@
+    <div class="center-item">
+        @Html.PagedListPager((IPagedList)Model, page => Url.Action("Markalar", new { page }))
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        function Contains(text_one, text_two) {
+            if (text_one.indexOf(text_two) != -1) {
+                return true;
+            }
+        }
+        $("#ara").keyup(function () {
+            var searchText = $("#ara").val().toLowerCase();
+            $(".modal-body").each(function () {
+                if (!Contains($(this).text.toLowerCase(), searchText)) {
+                    $(this).hide();
+                }
+                else {
+                    $(this).show();
+                }
+            })
+        })
+    })
+</script>

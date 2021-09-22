@@ -1,0 +1,449 @@
+﻿@model ViewModel
+@using ctfw.Models.EntityFramework
+
+<div class="container-md">
+    @* Şikayet *@
+    @foreach (var x in Model.Complaints)
+    {
+        @* Complaints(Şikayetler) Tablosu İÇİNDE KULLANILANLAR
+            @x.complaint_header
+            @x.username
+            @x.complaint_releasedate
+            @x.complaint_text
+            @x.complaint_processstate
+        *@
+        <div data-id="@x.id" id="ticket-id" class="modal-body complaints mt-3 reloaded-page">
+            <div class="row complaints-center">
+                <div class="col-lg-8 modal-md-12">
+                    @if (@x.complaint_picture != null)
+                    {
+                        <div class="personel-complaint">
+                            <a data-dismiss="modal" data-toggle="modal" data-target="#showimage" aria-hidden="true" style="cursor:pointer">
+                                <img src="@x.complaint_picture" class="modal-round">
+                            </a>
+                        </div>
+                    }
+                    <div class="modal-dialog div-centers modal-xl">
+                        <div class="modal-content complaints border-0">
+                            <span class="complaints-header">@x.complaint_header.Trim()</span>
+                            <div class="modal-header">
+                                <div class="complaint-username ml-n3">
+                                    <div class="d-flex">
+                                        <img src="~/Content/images/image1.png" class="complaints-img" />
+                                        <div class="center-item-grid ml-2">
+                                            <a href="/Home/Profile/@x.Users.id" class="activate" target="_self" style="z-index: 999; pointer-events: all">
+                                                <span>@x.Users.username.Trim()</span>
+                                            </a>
+                                            <a href="/Home/MarkaDetay/@x.Companys.id" target="_self" style="z-index: 999; pointer-events: all">
+                                                <span>@x.Companys.company</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <span class="date-time time-top">
+                                    <time class="timeago" datetime="">@x.complaint_releasedate</time>
+                                </span>
+                                @* Kişi Sadece Kendi Yorumlarını Silebilir *@
+                                @if (@HttpContext.Current.User.Identity.IsAuthenticated && @HttpContext.Current.User.Identity.Name == @x.username)
+                                {
+                                    <button type="submit" id="remove-complaint" class="btn" style="z-index: 999; pointer-events: all" data-id="@x.id">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                }
+                            </div>
+                            <div class="modal-body">
+                                <span class="complaints-text">
+                                    @x.complaint_text.Trim()
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body col-lg-4 col-md-12 complaint-process p-3 center-item-grid modal-round">
+                    <span class="process-head-text">İlgili Marka</span>
+                    <span class="process-company">
+                        <a href="/Home/MarkaDetay/@x.Companys.id" target="_self" style="z-index: 999; pointer-events: all">
+                            @x.Companys.company
+                        </a>
+                    </span>
+                    <span class="process-head-text">Şikayet Durumu</span>
+                    <span class="process-text">Sorun Yayında</span>
+                    <div>
+                        @if (@x.complaint_processstate == "Y")
+                        {
+                            <span class="process-text">Çözüldü</span>
+                        }
+                        @if (@x.complaint_processstate == "W")
+                        {
+                            <span class="process-text">Beklemede</span>
+                        }
+
+                        <input id="processstate" value="@x.id" hidden />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade text-center pr-0" id="showimage" tabindex="-1" aria-labelledby="images-Modal" aria-hidden="true">
+            <div id="full-modal" class="modal-dialog">
+                <div class="modal-content border-0">
+                    <div class="modal-header d-flex">
+                        <h5 class="modal-title fw-bold text-dark" id="exampleModalLabel">full-images</h5>
+                        <div class="popup-image">
+                            <i class="far fa-image"></i>
+                            <span class="complaints-text"> @x.complaint_header.Trim()</span>
+                        </div>
+                        <span class="close" data-dismiss="modal" aria-label="Close" aria-hidden="true" style="cursor:pointer">
+                            &times;
+                        </span>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                    <div class="modal-body center-item w-100 h-100">
+                        <img src="@x.complaint_picture" class="modal-popup-img">
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    @* Cevap *@
+    @foreach (var x in Model.Comments)
+    {
+        @* Comments(Yorumlar) Tablosu Cevap - İÇİNDE KULLANILANLAR
+            @x.comment_answer
+            @x.username
+            @x.comment_date
+            @x.comment
+            @x.complaint_id
+        *@
+
+        @* Cevap Olanları Getirme *@
+        if (@x.comment_answer == "Y")
+        {
+            <div class="comment-title">
+                <h3>Cevap</h3>
+            </div>
+            <div class="complaints answer-t">
+                <div class="modal-body mb-n4">
+                    <div class="modal-dialog div-centers modal-xl">
+                        <div class="modal-header pt-0">
+                            <span class="complaint-username ml-n3">
+                                <img src="~/Content/images/image1.png" class="complaints-img" />
+                                <a href="/Home/Profile/@x.Users.id" class="activate" target="_self" style="z-index: 999; pointer-events: all">
+                                    <span>@x.username.Trim()</span>
+                                </a>
+                            </span>
+                            <span class="date-time time-top">
+                                <time class="timeago" datetime="">@x.comment_date</time>
+                            </span>
+                        </div>
+                        <span class="complaints-text">
+                            @x.comment.Trim()
+                        </span>
+                    </div>
+                </div>
+                <div>
+                    <input id="id_answer" value="@x.id" hidden />
+                    <input id="username_answer" value="@x.username" hidden />
+                    <input id="comment_date_answer" value="@x.comment_date" hidden />
+                    <input id="comment_answer" value="@x.comment" hidden />
+                    <input id="user_id_answer" value="@x.complaint_id" hidden />
+                    <input id="comment_answer_answer" value="@x.comment_answer" hidden />
+                </div>
+                @* Şikayet cevabını geri çıkarma *@
+                @if (@HttpContext.Current.User.Identity.IsAuthenticated && @HttpContext.Current.User.Identity.Name == @x.Complaints.username)
+                {
+                    <div class="dropdown-divider"></div>
+                    <div class="modal-header comment-bottom-area answer-t">
+                        <button type="submit" id="btnCancelAnswer" class="btn">
+                            <i class="fas fa-thumbs-up"></i>
+                        </button>
+                    </div>
+                }
+            </div>
+        }
+    }
+    @* Marka Cevabı *@
+    <div class="comment-title">
+        <h3>Marka Cevabı</h3>
+    </div>
+
+    <div class="complaints">
+
+        @foreach (var x in Model.Comments)
+        {
+            @* Comments(Yorumlar) Tablosu Tüm Yorumlar - İÇİNDE KULLANILANLAR
+                @x.comment_answer
+                @x.username
+                @x.comment_date
+                @x.comment
+                @x.complaint_id
+            *@
+
+            @* Marka Cevabını Getirme *@
+            if (@x.Users.role == "M")
+            {
+                <div class="modal-body mb-n4">
+                    <div class="modal-dialog div-centers modal-xl ">
+                        <div class="modal-header pt-0">
+                            <span class="complaint-username ml-n3">
+                                <img src="~/Content/images/image1.png" class="complaints-img" />
+                                <a href="/Home/Profile/@x.Users.id" class="activate" target="_self" style="z-index: 999; pointer-events: all">
+                                    <span>@x.username.Trim()</span>
+                                </a>
+                            </span>
+                            <div class="d-grid time-top">
+                                <span class="date-time">
+                                    <time class="timeago" datetime="">@x.comment_date</time>
+                                </span>
+
+                                @* Kişi Sadece Kendi Yorumlarını Silebilir *@
+                                @if (@HttpContext.Current.User.Identity.IsAuthenticated && @HttpContext.Current.User.Identity.Name == @x.username)
+                                {
+                                    <button type="submit" id="remove-comment" class="btn" style="z-index: 999; pointer-events: all" data-id="@x.id">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                }
+                            </div>
+                        </div>
+                        <span class="complaints-text">
+                            @x.comment.Trim()
+                        </span>
+                    </div>
+                </div>
+                <div>
+                    <input id="id" value="@x.id" hidden />
+                    <input id="username" value="@x.username" hidden />
+                    <input id="comment_date" value="@x.comment_date" hidden />
+                    <input id="comment" value="@x.comment" hidden />
+                    <input id="user_id" value="@x.complaint_id" hidden />
+                </div>
+
+                @* Şikayeti Yapan Kişi Cevabı Onaylasın *@
+                if (@HttpContext.Current.User.Identity.IsAuthenticated && @HttpContext.Current.User.Identity.Name == @x.Complaints.username && @x.Complaints.complaint_processstate != "Y")
+                {
+                    <div class="dropdown-divider"></div>
+                    <div class="modal-header comment-bottom-area mb-4">
+                        <button type="submit" id="btnSaveAnswer" class="btn" data-id="@x.id">
+                            <i class="fas fa-thumbs-up"></i>
+                        </button>
+                    </div>
+                }
+
+            }
+        }
+    </div>
+    @* Yorumlar *@
+    <div class="comment-title">
+        <h3>Yorumlar</h3>
+    </div>
+
+    <div class="complaints">
+
+        @foreach (var x in Model.Comments)
+        {
+            @* Comments(Yorumlar) Tablosu Tüm Yorumlar - İÇİNDE KULLANILANLAR
+                @x.comment_answer
+                @x.username
+                @x.comment_date
+                @x.comment
+                @x.complaint_id
+            *@
+
+            @* Cevap Olmayanları Getirme *@
+            if (@x.comment_answer != "Y" && @x.Users.role != "M")
+            {
+                <div class="modal-body mb-n4">
+                    <div class="modal-dialog div-centers modal-xl ">
+                        <div class="modal-header pt-0">
+                            <span class="complaint-username ml-n3">
+                                <img src="~/Content/images/image1.png" class="complaints-img" />
+                                <a href="/Home/Profile/@x.Users.id" class="activate" target="_self" style="z-index: 999; pointer-events: all">
+                                    <span>@x.username.Trim()</span>
+                                </a>
+                            </span>
+                            <div class="d-grid time-top">
+                                <span class="date-time">
+                                    <time class="timeago" datetime="">@x.comment_date</time>
+                                </span>
+
+                                @* Kişi Sadece Kendi Yorumlarını Silebilir *@
+                                @if (@HttpContext.Current.User.Identity.IsAuthenticated && @HttpContext.Current.User.Identity.Name == @x.username)
+                                {
+                                    <button type="submit" id="remove-comment" class="btn" style="z-index: 999; pointer-events: all" data-id="@x.id">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                }
+                            </div>
+                        </div>
+                        <span class="complaints-text">
+                            @x.comment.Trim()
+                        </span>
+                    </div>
+                </div>
+                <div>
+                    <input id="id" value="@x.id" hidden />
+                    <input id="username" value="@x.username" hidden />
+                    <input id="comment_date" value="@x.comment_date" hidden />
+                    <input id="comment" value="@x.comment" hidden />
+                    <input id="user_id" value="@x.complaint_id" hidden />
+                </div>
+
+                @* Şikayeti Yapan Kişi Cevabı Onaylasın *@
+                if (@HttpContext.Current.User.Identity.IsAuthenticated && @HttpContext.Current.User.Identity.Name == @x.Complaints.username && @x.Complaints.complaint_processstate != "Y")
+                {
+                    <div class="dropdown-divider"></div>
+                    <div class="modal-header comment-bottom-area mb-4">
+                        <button type="submit" id="btnSaveAnswer" class="btn" data-id="@x.id">
+                            <i class="fas fa-thumbs-up"></i>
+                        </button>
+                    </div>
+                }
+
+            }
+        }
+    </div>
+    @* Yorum Yapma Alanı *@
+    <div class="comment-area modal-dialog modal-xl">
+        <div class="modal-content border-0" style="background-color: transparent !important">
+            @if (@HttpContext.Current.User.Identity.IsAuthenticated)
+            {
+                //using (Html.BeginForm("Comment", "Home", FormMethod.Post))
+                //{
+                <form method="post" action="">
+                    @*<input type="text" placeholder="ID" required id="comment_complaint_id" name="complaint_id" value="@ViewData["deger"]" hidden />*@
+                    @*@Html.TextBoxFor(m => m.complaint_id, new { @name = "complaint_id", id="com", text= @ViewData["deger"], @Value = @ViewData["deger"], style = "display: none;" })*@
+
+                    @*<input type="text" placeholder="ID" required id="complaint_username" name="username" value="@System.Web.HttpContext.Current.User.Identity.Name" hidden />*@
+                    @Html.TextBoxFor(m => m.comment.username, new { @name = "username", text = @System.Web.HttpContext.Current.User.Identity.Name, @Value = @System.Web.HttpContext.Current.User.Identity.Name, style = "display: none;" })
+
+                    <div class="comment-overlay">
+                        <div class="comment-group">
+                            <div class="comment-awatar">
+                                <img src="~/Content/images/image1.png" class="complaints-img" />
+                            </div>
+                            @*<textarea class="textarea-div" id="complaint_comment" name="comment" placeholder="Yorumunuzu buraya yazın...(Max. 2500 karakter)" val="" required></textarea>*@
+                            @Html.TextAreaFor(m => m.comment.comment, new { @class = "textarea-div", placeholder = "Yorumunuzu buraya yazın...(Max. 2500 karakter)", required = "required", maxlength = "2500"})
+                            @*@Html.TextAreaFor(m => m.comment, new { @class = "textarea-div", id = "complaint_comment", name = "comment", placeholder = "Yorumunuzu buraya yazın...(Max. 2500 karakter)", required = "required" })*@
+                        </div>
+                        <div class="comment-bottom-area">
+                            <button onclick="reloadpage()" id="add-comment" type="submit" class="btn btn-search button-input-round">Yorum Yap</button>
+                        </div>
+                    </div>
+                </form>
+                //}
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        @* Cevabı Kaldırma *@
+        $(document).on("click", "#btnCancelAnswer", function (e) {
+            $.ajax({
+                type: "POST",
+                url: "/Home/Answer",
+                data: {
+                    id: $("#id_answer").val(),
+                    complaint_id: $("#user_id_answer").val()
+                    //username: $("#username_answer").val(),
+                    //comment: $("#comment_answer").val(),
+                    //comment_date: $("#comment_date_answer").val(),
+                    //comment_answer: $("#comment_answer_answer").val()
+                },
+                success: function (response) {
+                    window.location.reload();
+                }
+            });
+        });
+
+        @* Cevap Seçme *@
+        $(document).on("click", "#btnSaveAnswer", function (e) {
+            $.ajax({
+                type: "POST",
+                url: "/Home/Like",
+                data: {
+                    id: $("#user_id").val(),
+                    user_id: $(this).data("id")
+                },
+                success: function (response) {
+                    window.location.reload();
+                }
+            });
+        });
+
+        @* Kullanıcının kendi yorumunu kaldırması *@
+        $(document).on("click", "#remove-comment", function (e) {
+            $.ajax({
+                type: "POST",
+                url: "/Home/RemoveComment",
+                data: {
+                    id: $(this).data("id")
+                },
+                success: function (response) {
+                    window.location.reload();
+                }
+            });
+        });
+
+        @* Kullanıcının kendi şikayetini kaldırması *@
+        $(document).on("click", "#remove-complaint", function (e) {
+            $.ajax({
+                type: "POST",
+                url: "/Home/RemoveComplaint",
+                data: {
+                    id: $(this).data("id")
+                },
+                success: function (response) {
+                    window.location.reload();
+                }
+            });
+        });
+    });
+</script>
+
+<script>
+    @* Yorum Yaptıktan Sonra Yönlendirme *@
+
+    var ticketid = -1;
+    function reloadpage() {
+        var name = $("#comment_username").val()
+        var text = $("#comment_comment").val();
+        var ticketid = $("#ticket-id").data("id");
+        if (text == "") {
+            $("#ticket-detail").load("/Home/SikayetDetay/" + ticketid);
+            alert("Cevap boş geçilemez!");
+        }
+        $.ajax({
+            method: "POST",
+            url: "/Home/Comment/",
+            data: {
+                id: ticketid,
+                content: text,
+                username: name
+            },
+            success: function (response) {
+                if (response.result) {
+                    $("#ticket-detail").load("/Home/SikayetDetay/" + ticketid)
+                }
+            }
+        });
+        //).done(function (data) {
+        //    if (data.result) {
+        //        // yorumlar partial tekrar yüklenir..
+        //        $("#ticket-detail").load("/Home/SikayetDetay/" + ticketid);
+        //        alert("Cevap gönderildi.");
+        //    }
+        //    else {
+        //        alert("Cevap gönderilemedi.");
+        //    }
+        //}).fail(function () {
+        //    alert("hata")
+        //});
+    }
+
+    @* Form Yeniden Gönder İsteğini Kapatma *@
+    if (window.history.replaceState) {
+        window.history.replaceState(null, null, window.location.href);
+    }
+</script>

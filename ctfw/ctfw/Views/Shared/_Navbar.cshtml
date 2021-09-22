@@ -1,0 +1,87 @@
+﻿@using ctfw.Models.EntityFramework
+<nav class="navbar sticky-top navbar-expand-lg navbar-light" style="background-color:#fff">
+    <div class="container-md">
+        <a class="navbar-brand" href="/Home/Index">
+            <img src="~/Content/images/logo.png" style="height: 38px" />
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler"
+                aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarToggler">
+            <ul class="navbar navbar-nav">
+                <li><a class="navbar-link" href="/Home/Sikayetler" id="active-link">Şikayetler</a></li>
+                <li><a class="navbar-link" href="/Home/Markalar" id="active-link">Markalar</a></li>
+            </ul>
+
+            <div class="search-bar-holder header-autocomplete-form" id="header-autocomplete">
+                <div id="text-autocomplete" type="text" class="input-field-holder text-autocomplete" autocomplete="off">
+                </div>
+            </div>
+
+            <ul class="navbar-right navbar-nav">
+                @if (System.Web.HttpContext.Current.User.Identity.IsAuthenticated)
+                {
+                    if (User.IsInRole("U"))
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link" href="/Notification/AllNotification" id="noti-icon" style="z-index: 999; pointer-events: all">
+                                <i class="far fa-bell"></i>
+                                @Html.Action("Notification", "Notification")
+                            </a>
+                        </li>
+                    }
+
+                    else if (User.IsInRole("M"))
+                    {
+                        <li class="nav-item dropdown">
+                            <a class="nav-link" href="/Notification/CompanyAllNotification" id="noti-icon" style="z-index: 999; pointer-events: all">
+                                <i class="far fa-bell"></i>
+                                @Html.Action("CompanyNotification", "Notification")
+                            </a>
+                        </li>
+                    }
+                        <li>
+                            <div class="dropdown mr-auto">
+                                <a class="dropdown-toggle login-user" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-user" aria-hidden="true"></i>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-right modal-round" aria-labelledby="navbarDropdown">
+                                    <li><a id="noti-id" class="dropdown-item modal-round" href="#">@HttpContext.Current.User.Identity.Name</a></li>
+                                    <li><div class="dropdown-divider"></div></li>
+                                    @if (User.IsInRole("U"))
+                                    {
+                                        <li><a class="dropdown-item modal-round" href="/Home/Profile/@ViewData["userid"]">profile</a></li>
+                                    }
+                                    <li><a class="dropdown-item modal-round" href="/Security/Logout">logout</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                    }
+                    else
+                    {
+                        <li><a class="btn-login" href="/Security/Login">Giriş Yap / Üye Ol</a></li>
+                    }
+                    @if (User.IsInRole("A"))
+                    {
+                        <li>
+                            <a href="/Admin/Index" class="btn btn-purple button-input-round">
+                                <i class="fas fa-crown" width="13"
+                                   height="13"></i><span class="text-size ml-2">Admin Paneli</span>
+                            </a>
+                        </li>
+                    }
+                    else if(User.IsInRole("M")){}
+                    else
+                    {
+                        <li>
+                            <a href="/Home/Sikayetyaz" class="btn btn-purple button-input-round">
+                                <i class="fas fa-plus" width="13"
+                                   height="13"></i><span class="text-size ml-2">Şikayet Yaz</span>
+                            </a>
+                        </li>
+                    }
+            </ul>
+        </div>
+    </div>
+</nav>

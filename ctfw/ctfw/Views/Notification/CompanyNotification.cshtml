@@ -1,0 +1,26 @@
+﻿@model ViewModel
+
+@* Marka Bildirim Sayacı *@
+@{var toplambldirim = 0;}
+@if (Model.ComplaintsList != null)
+{
+    foreach (var x in Model.ComplaintsList)
+    {
+            if (x.notification == false)
+            {
+                toplambldirim = toplambldirim + 1;
+            }
+    }
+}
+<span class="badge btn-purple navbar-badge modal-round">@toplambldirim</span>
+<script>
+    $(document).ready(function (e) {
+
+        window.setInterval(function (e) {
+            $.ajax({
+                type: "GET",
+                url: "/Notification/CompanyNotification"
+            })
+        }, 5000)
+    })
+</script>

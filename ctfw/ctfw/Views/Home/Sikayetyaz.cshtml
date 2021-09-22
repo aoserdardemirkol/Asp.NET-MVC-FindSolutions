@@ -1,0 +1,144 @@
+﻿@model ctfw.Models.EntityFramework.Complaints
+@{
+    Layout = null;
+}
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/all.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.2/css/v4-shims.css">
+    <link rel="stylesheet" href="~/Content/style.css" />
+
+    <link href="~/Content/jquery-editable-select.min.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-3.5.1.js"></script>
+
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+    <title>Şikayet Yaz</title>
+</head>
+
+<body class="index-bg-color p-0">
+    <div class="row complaints-center m-0">
+        <div class="col-lg-8 modal-md-12">
+            @using ctfw.Models.EntityFramework
+            @* Şikayet Nav *@
+            <nav class="navbar sticky-top navbar-expand-lg navbar-light index-bg-color m-0 p-0" style="background-color:#fff">
+                <div class="container-md">
+                    <div class="collapse navbar-collapse" id="navbarToggler">
+                        <ul class="navbar navbar-nav">
+                            <li><a class="navbar-link" href="/Home/Sikayetler" id="active-link">Şikayetler</a></li>
+                            <li><a class="navbar-link" href="/Home/Markalar" id="active-link">Markalar</a></li>
+                        </ul>
+
+                        <div class="search-bar-holder header-autocomplete-form" id="header-autocomplete">
+                            <div id="text-autocomplete" type="text" class="input-field-holder text-autocomplete" autocomplete="off">
+                            </div>
+                        </div>
+
+                        <ul class="navbar-right navbar-nav">
+                            @if (System.Web.HttpContext.Current.User.Identity.IsAuthenticated)
+                            {
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link" href="/Notification/AllNotification" id="noti-icon" style="z-index: 999; pointer-events: all">
+                                        <i class="far fa-bell"></i>
+                                        @Html.Action("Notification", "Notification")
+                                    </a>
+                                </li>
+                                <li>
+                                    <div class="dropdown mr-auto">
+                                        <a class="dropdown-toggle login-user" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <i class="fas fa-user" aria-hidden="true"></i>
+                                        </a>
+                                        <ul class="dropdown-menu dropdown-menu-right modal-round" aria-labelledby="navbarDropdown">
+                                            <li><a class="dropdown-item modal-round" href="#">@HttpContext.Current.User.Identity.Name</a></li>
+                                            <li><div class="dropdown-divider"></div></li>
+                                            <li><a class="dropdown-item modal-round" href="/Home/Profile/@ViewData["userid"]">profile</a></li>
+                                            <li><a class="dropdown-item modal-round" href="/Security/Logout">logout</a></li>
+                                        </ul>
+                                    </div>
+                                </li>
+                            }
+
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            @* Şikayet Gönderme Alanı *@
+            @using (Html.BeginForm("Sikayetyaz", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.TextBoxFor(m => m.username, new { @name = "username", text = @System.Web.HttpContext.Current.User.Identity.Name, @Value = @System.Web.HttpContext.Current.User.Identity.Name, style = "display: none;" })
+                <div class="comment-overlay mt-3">
+                    <div class="create-complaint-title">
+                        <h3>Markalar</h3>
+                    </div>
+                    <div class="comment-group m-3">
+                        @Html.DropDownListFor(m => m.company_id, (List<SelectListItem>)ViewBag.dgr, new { @class = "form-control", style = "color:#000 !important;", id = "dropdown-edit" })
+                    </div>
+                    <div class="create-complaint-title mt-2">
+                        <h3>Şikayet Başlığı</h3>
+                    </div>
+                    <div class="comment-group m-3">
+                        @Html.TextAreaFor(m => m.complaint_header, new { @class = "create-textarea-div m-0", style = "min-height: 61px !important;", id = "create_complaint_comment_header", name = "complaint_header", placeholder = "Şikayet başlığını buraya yazın...(Max. 250 karakter)", required = "required", maxlength = "250" })
+                    </div>
+                    <div class="create-complaint-title mt-3">
+                        <h3>Şikayet Detayı</h3>
+                    </div>
+                    <div class="comment-group m-3">
+                        @Html.TextAreaFor(m => m.complaint_text, new { @class = "create-textarea-div m-0", style = "min-height: 330px !important", id = "create_complaint_comment", name = "complaint_text", placeholder = "Şikayetinizi buraya yazın...(Max. 2500 karakter)", required = "required", maxlength = "2500" })
+                    </div>
+                    <div class="create-complaint-title mt-2">
+                        <h3>Fotoğraf Yükle</h3>
+                    </div>
+                    <div class="m-3">
+                        <img id="output" class="img-thumbnail modal-round border-0" style="background-color: transparent !important">
+                        <input class="form-control modal-round form-control-md mt-2 modal-round border-0" style="background-color: transparent !important" accept="image/*" name="image" id="file"
+                            type="file" onchange="loadFile(event)" />
+                    </div>
+                    <button type="submit" class="btn btn-purple button-input-round m-3">
+                        Paylaş
+                    </button>
+                </div>
+            }
+        </div>
+        @* Gösterge *@
+        <div class="modal-body col-lg-4 col-md-12 create-complaint p-3 center-item-grid">
+            <a class="navbar-brand" href="/Home/Index">
+                <img src="~/Content/images/logo.png" style="height: 50px" />
+            </a>
+            <div class="complaints-header d-block p-2 center-item">
+                <span style="color: #f4f5f9 !important;">Şikayet Oluştur</span>
+                <i class="fas fa-pencil-alt fa-1x fa-color"></i>
+            </div>
+            <div class="complaint-text p-2">
+                <span class="step-circle"><span>1</span></span>
+                <span style="color: #f4f5f9 !important;">Başlığı doldur</span>
+            </div>
+            <div class="complaint-text p-2">
+                <span class="step-circle"><span>2</span></span>
+                <span style="color: #f4f5f9 !important;">Şikayeti Yaz</span>
+            </div>
+            <div class="complaint-text p-2">
+                <span class="step-circle"><span>3</span></span>
+                <span style="color: #f4f5f9 !important;">Markayı Seç</span>
+            </div>
+            <div class="complaint-text p-2">
+                <span class="step-circle"><span>4</span></span>
+                <span style="color: #f4f5f9 !important;">Belgen varsa yükle</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery-editable-select.min.js"></script>
+    <script>
+        var loadFile = function (event) {
+            var image = document.getElementById('output');
+            image.src = URL.createObjectURL(event.target.files[0]);
+        };
+    </script>
+
+</body>
+</html>

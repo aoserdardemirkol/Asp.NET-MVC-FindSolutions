@@ -1,0 +1,368 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="ctfwModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Comments">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="username" Type="nchar" MaxLength="20" Nullable="false" />
+          <Property Name="comment" Type="nchar" MaxLength="2500" Nullable="false" />
+          <Property Name="comment_date" Type="datetime" Nullable="false" />
+          <Property Name="complaint_id" Type="int" Nullable="false" />
+          <Property Name="comment_answer" Type="nchar" MaxLength="1" Nullable="false" />
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="notification" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Companys">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="company" Type="varchar(max)" Nullable="false" />
+          <Property Name="company_img" Type="nvarchar(max)" />
+          <Property Name="company_text" Type="nchar" MaxLength="2500" />
+        </EntityType>
+        <EntityType Name="Complaints">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="user_id" Type="int" Nullable="false" />
+          <Property Name="complaint_header" Type="nchar" MaxLength="70" Nullable="false" />
+          <Property Name="complaint_text" Type="nchar" MaxLength="2500" Nullable="false" />
+          <Property Name="complaint_releasedate" Type="datetime" Nullable="false" />
+          <Property Name="complaint_processstate" Type="nchar" MaxLength="1" Nullable="false" />
+          <Property Name="username" Type="nchar" MaxLength="20" Nullable="false" />
+          <Property Name="complaint_picture" Type="nvarchar(max)" />
+          <Property Name="company_id" Type="int" Nullable="false" />
+          <Property Name="notification" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="username" Type="nchar" MaxLength="20" Nullable="false" />
+          <Property Name="email" Type="nchar" MaxLength="50" Nullable="false" />
+          <Property Name="password" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="role" Type="nchar" MaxLength="1" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Comments_Complaints">
+          <End Role="Complaints" Type="Self.Complaints" Multiplicity="1" />
+          <End Role="Comments" Type="Self.Comments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Complaints">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Comments">
+              <PropertyRef Name="complaint_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comments_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Comments" Type="Self.Comments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Comments">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Complaints_Companys">
+          <End Role="Companys" Type="Self.Companys" Multiplicity="1" />
+          <End Role="Complaints" Type="Self.Complaints" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Companys">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Complaints">
+              <PropertyRef Name="company_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Complaints_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Complaints" Type="Self.Complaints" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Complaints">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ctfwModelStoreContainer">
+          <EntitySet Name="Comments" EntityType="Self.Comments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Companys" EntityType="Self.Companys" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Complaints" EntityType="Self.Complaints" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Comments_Complaints" Association="Self.FK_Comments_Complaints">
+            <End Role="Complaints" EntitySet="Complaints" />
+            <End Role="Comments" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comments_Users" Association="Self.FK_Comments_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Comments" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Complaints_Companys" Association="Self.FK_Complaints_Companys">
+            <End Role="Companys" EntitySet="Companys" />
+            <End Role="Complaints" EntitySet="Complaints" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Complaints_Users" Association="Self.FK_Complaints_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Complaints" EntitySet="Complaints" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ctfwModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Comments">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="username" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="comment" Type="String" MaxLength="2500" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="comment_date" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="complaint_id" Type="Int32" Nullable="false" />
+          <Property Name="comment_answer" Type="String" MaxLength="1" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="notification" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Complaints" Relationship="Self.FK_Comments_Complaints" FromRole="Comments" ToRole="Complaints" />
+          <NavigationProperty Name="Users" Relationship="Self.FK_Comments_Users" FromRole="Comments" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Companys">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="company" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="company_img" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="company_text" Type="String" MaxLength="2500" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Complaints" Relationship="Self.FK_Complaints_Companys" FromRole="Companys" ToRole="Complaints" />
+        </EntityType>
+        <EntityType Name="Complaints">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="user_id" Type="Int32" Nullable="false" />
+          <Property Name="complaint_header" Type="String" MaxLength="70" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="complaint_text" Type="String" MaxLength="2500" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="complaint_releasedate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="complaint_processstate" Type="String" MaxLength="1" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="username" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="complaint_picture" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="company_id" Type="Int32" Nullable="false" />
+          <Property Name="notification" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Comments" Relationship="Self.FK_Comments_Complaints" FromRole="Complaints" ToRole="Comments" />
+          <NavigationProperty Name="Companys" Relationship="Self.FK_Complaints_Companys" FromRole="Complaints" ToRole="Companys" />
+          <NavigationProperty Name="Users" Relationship="Self.FK_Complaints_Users" FromRole="Complaints" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="principal_id" Type="Int32" Nullable="false" />
+          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="version" Type="Int32" />
+          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="username" Type="String" MaxLength="20" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="email" Type="String" MaxLength="50" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="role" Type="String" MaxLength="1" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Comments" Relationship="Self.FK_Comments_Users" FromRole="Users" ToRole="Comments" />
+          <NavigationProperty Name="Complaints" Relationship="Self.FK_Complaints_Users" FromRole="Users" ToRole="Complaints" />
+        </EntityType>
+        <Association Name="FK_Comments_Complaints">
+          <End Role="Complaints" Type="Self.Complaints" Multiplicity="1" />
+          <End Role="Comments" Type="Self.Comments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Complaints">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Comments">
+              <PropertyRef Name="complaint_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Comments_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Comments" Type="Self.Comments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Comments">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Complaints_Companys">
+          <End Role="Companys" Type="Self.Companys" Multiplicity="1" />
+          <End Role="Complaints" Type="Self.Complaints" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Companys">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Complaints">
+              <PropertyRef Name="company_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Complaints_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Complaints" Type="Self.Complaints" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Complaints">
+              <PropertyRef Name="user_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ctfwEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Comments" EntityType="Self.Comments" />
+          <EntitySet Name="Companys" EntityType="Self.Companys" />
+          <EntitySet Name="Complaints" EntityType="Self.Complaints" />
+          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+          <EntitySet Name="Users" EntityType="Self.Users" />
+          <AssociationSet Name="FK_Comments_Complaints" Association="Self.FK_Comments_Complaints">
+            <End Role="Complaints" EntitySet="Complaints" />
+            <End Role="Comments" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Comments_Users" Association="Self.FK_Comments_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Comments" EntitySet="Comments" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Complaints_Companys" Association="Self.FK_Complaints_Companys">
+            <End Role="Companys" EntitySet="Companys" />
+            <End Role="Complaints" EntitySet="Complaints" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Complaints_Users" Association="Self.FK_Complaints_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Complaints" EntitySet="Complaints" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ctfwModelStoreContainer" CdmEntityContainer="ctfwEntities">
+          <EntitySetMapping Name="Comments">
+            <EntityTypeMapping TypeName="ctfwModel.Comments">
+              <MappingFragment StoreEntitySet="Comments">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="comment" ColumnName="comment" />
+                <ScalarProperty Name="comment_date" ColumnName="comment_date" />
+                <ScalarProperty Name="complaint_id" ColumnName="complaint_id" />
+                <ScalarProperty Name="comment_answer" ColumnName="comment_answer" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="notification" ColumnName="notification" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Companys">
+            <EntityTypeMapping TypeName="ctfwModel.Companys">
+              <MappingFragment StoreEntitySet="Companys">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="company" ColumnName="company" />
+                <ScalarProperty Name="company_img" ColumnName="company_img" />
+                <ScalarProperty Name="company_text" ColumnName="company_text" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Complaints">
+            <EntityTypeMapping TypeName="ctfwModel.Complaints">
+              <MappingFragment StoreEntitySet="Complaints">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="complaint_header" ColumnName="complaint_header" />
+                <ScalarProperty Name="complaint_text" ColumnName="complaint_text" />
+                <ScalarProperty Name="complaint_releasedate" ColumnName="complaint_releasedate" />
+                <ScalarProperty Name="complaint_processstate" ColumnName="complaint_processstate" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="complaint_picture" ColumnName="complaint_picture" />
+                <ScalarProperty Name="company_id" ColumnName="company_id" />
+                <ScalarProperty Name="notification" ColumnName="notification" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="sysdiagrams">
+            <EntityTypeMapping TypeName="ctfwModel.sysdiagrams">
+              <MappingFragment StoreEntitySet="sysdiagrams">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
+                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="definition" ColumnName="definition" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="ctfwModel.Users">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="role" ColumnName="role" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
